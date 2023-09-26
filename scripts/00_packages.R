@@ -17,8 +17,3 @@ p_load(tidyverse, # Manipular dataframes
        stringi,
        skimr) #para modelos de ML
 
-# solve package conflict
-filter = dplyr::filter
-select = dplyr::select
-`%no%` = Negate(`%in%`)
-scalebar = ggsn::scalebar

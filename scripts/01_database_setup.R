@@ -1,23 +1,7 @@
 # Data_base_creation
 
 rm(list = ls())
-# Empezamos con OSM
-
-# Cargar pacman (contiene la función p_load)
-require(pacman) 
-
-# Cargar las librerías listadas e instalarlas en caso de ser necesario
-p_load(tidyverse, # Manipular dataframes
-       rio, # Import data easily
-       plotly, # Gráficos interactivos
-       leaflet, # Mapas interactivos
-       rgeos, # Calcular centroides de un poligono
-       tmaptools, # geocode_OSM()
-       sf, # Leer/escribir/manipular datos espaciales
-       osmdata, # Get OSM's data 
-       tidymodels,
-       stringi,
-       skimr) #para modelos de ML
+source("scripts/00_packages.R")
 
 
 train <- import("stores/train.csv")
