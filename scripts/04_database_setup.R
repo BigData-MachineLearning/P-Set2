@@ -8,10 +8,10 @@ train <- import("stores/train.csv")
 template <-import("stores/submission_template.csv")
 test <- import("stores/test.csv")
 
+#
+colnames(train)
 
-# At least 4 predictors coming from external sources
+# Que tenemos
 
-
-# At least 2 predictors coming from the title or description 
-# of the properties.
+# Anlisis missings
 
