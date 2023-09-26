@@ -1,8 +1,6 @@
-# Data_base_creation
-
-rm(list = ls())
 # Empezamos con OSM
-
+rm(list = ls())
+if(require("pacman")==F){install.packages("pacman")}
 # Cargar pacman (contiene la función p_load)
 require(pacman) 
 
@@ -19,14 +17,8 @@ p_load(tidyverse, # Manipular dataframes
        stringi,
        skimr) #para modelos de ML
 
-
-train <- import("stores/train.csv")
-template <-import("stores/submission_template.csv")
-test <- import("stores/test.csv")
-
-
-
-
-
-
-
+# solve package conflict
+filter = dplyr::filter
+select = dplyr::select
+`%no%` = Negate(`%in%`)
+scalebar = ggsn::scalebar
