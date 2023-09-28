@@ -14,19 +14,26 @@ test <- test |>
 train <- train |>  
   mutate(description = iconv(description, from = "UTF-8", to = "ASCII//TRANSLIT"))
 
+test <- test |>  
+  mutate(description = iconv(description, from = "UTF-8", to = "ASCII//TRANSLIT"))
 
+# Limitamos caracteres especiales
 
+train <- train |>
+  mutate(description = str_replace_all(description, "[^[:alnum:]]", " "))
 
-
-# #liminamos caracteres especiales
-
-db <- db |>
+test <- test |>
   mutate(description = str_replace_all(description, "[^[:alnum:]]", " "))
 
 # quitar espacios dobles y mas
 
-db <- db |>
+train <- train |>
   mutate(description = str_trim(gsub("\\s+", " ", description)))
+
+
+test <- test |>
+  mutate(description = str_trim(gsub("\\s+", " ", description)))
+
 
 db$description[1]
 
