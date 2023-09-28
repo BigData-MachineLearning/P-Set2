@@ -4,14 +4,17 @@ rm(list = ls())
 source("scripts/00_packages.R")
 
 
-train <- import("stores/train.csv")
-template <-import("stores/submission_template.csv")
-test <- import("stores/test.csv")
+train <-   as.data.frame(import("stores/train.csv")) 
+template <- as.data.frame(import("stores/submission_template.csv")) 
+test <- as.data.frame(import("stores/test.csv")) 
 
 #
-colnames(train)
+
 
 # Que tenemos
+
+colnames(train)
+skim(train)
 
 # Anlisis missings
 
