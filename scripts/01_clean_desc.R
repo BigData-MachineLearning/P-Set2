@@ -3,14 +3,20 @@
 
 source("scripts/00_packages.R")
 
+train <- train |> 
+  mutate(description = str_to_lower(description))
 
-db <- db |> 
+test <- test |> 
   mutate(description = str_to_lower(description))
 
 # cambiar de utf 8 a ascii para evitar tildes. 
 
-db <- db |> 
+train <- train |>  
   mutate(description = iconv(description, from = "UTF-8", to = "ASCII//TRANSLIT"))
+
+
+
+
 
 # #liminamos caracteres especiales
 
