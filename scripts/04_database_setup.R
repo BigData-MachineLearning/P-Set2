@@ -40,6 +40,7 @@ train <- train |>
 # Dummy de penthouse
 
 
+# Distancia a chapinero o al centro
 
 # Imputaciones
 
