@@ -2,9 +2,10 @@
 
 rm(list = ls())
 
+# Esto es un script que carga los paquetes
 source("scripts/00_packages.R")
 
-
+#importo los datos
 
 train <-   as.data.frame(import("stores/train.csv")) 
 template <- as.data.frame(import("stores/submission_template.csv")) 
@@ -23,7 +24,7 @@ skim(train)
 
 # Variables texto
 
-# script de limpieza 
+# Este es el script que limpia inicialmente los datos de texto
 
 source("scripts/01_clean_desc.R")
 
