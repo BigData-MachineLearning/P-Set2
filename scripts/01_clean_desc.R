@@ -1,7 +1,6 @@
 ### Limpieza datos textos
 
-
-source("scripts/00_packages.R")
+# Todo a minuscula
 
 train <- train |> 
   mutate(description = str_to_lower(description))
@@ -34,10 +33,9 @@ train <- train |>
 test <- test |>
   mutate(description = str_trim(gsub("\\s+", " ", description)))
 
+# Como queda
+test$description[1]
 
-db$description[1]
 
-# viendo el parqueadero
 
-db <- db |> 
-  mutate(parqueadero = as.numeric(grepl("parqueadero", db$description)))
+

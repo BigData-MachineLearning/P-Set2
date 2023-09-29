@@ -1,5 +1,5 @@
 # Empezamos con OSM
-rm(list = ls())
+
 if(require("pacman")==F){install.packages("pacman")}
 # Cargar pacman (contiene la función p_load)
 require(pacman) 
