@@ -81,11 +81,7 @@ train <- train |>
   mutate(pent_house = as.numeric(grepl("\\b(parqueadero|garaje|parking)\\b", train$description)))
 
 
-# Distancia a chapinero o al centro
 
-
-
-# Imputaciones
 
 
 
@@ -97,6 +93,9 @@ longitud_central <- mean(train$lon)
 
 latitud_central <- mean(test$lat)
 longitud_central <- mean(test$lon)
+
+# Distancia a chapinero o al centro
+
 # Distancia transmi
 
 
@@ -111,7 +110,7 @@ longitud_central <- mean(test$lon)
 #Distacia parques
 
 
-#estrato si es posible
+#Estrato si es posible
 
 
 
