@@ -29,10 +29,10 @@ source("scripts/01_clean_desc.R")
 
 # Agrego las variables basado en lo que vi en mi nube de palabras
 test <- test |> 
-  mutate(parqueadero = as.numeric(grepl("\b(parqueadero|garaje|parking)\b", test$description)))
+  mutate(parqueadero = as.numeric(grepl("\\b(parqueadero|garaje|parking)\\b", test$description)))
 
 train <- train |> 
-  mutate(parqueadero = as.numeric(grepl("\b(parqueadero|garaje|parking)\b", train$description)))
+  mutate(parqueadero = as.numeric(grepl("\\b(parqueadero|garaje|parking)\\b", train$description)))
 
 # En que piso es el apto
 
@@ -73,8 +73,16 @@ test <- test |>
 
 # Dummy de penthouse
 
+# Agrego las variables basado en lo que vi en mi nube de palabras
+test <- test |> 
+  mutate(pent_house = as.numeric(grepl("\\b(penthouse|pent house|penthause|pent hause)\\b", test$description)))
+
+train <- train |> 
+  mutate(pent_house = as.numeric(grepl("\\b(parqueadero|garaje|parking)\\b", train$description)))
+
 
 # Distancia a chapinero o al centro
+
 
 # Imputaciones
 
