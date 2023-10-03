@@ -95,6 +95,8 @@ train <- train |>
 latitud_central <- mean(train$lat)
 longitud_central <- mean(train$lon)
 
+latitud_central <- mean(test$lat)
+longitud_central <- mean(test$lon)
 # Distancia transmi
 
 
