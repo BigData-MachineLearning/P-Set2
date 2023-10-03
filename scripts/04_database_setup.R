@@ -37,6 +37,32 @@ test <- test |>
 train <- train |> 
   mutate(parqueadero = as.numeric(grepl("\b(parqueadero|garaje|parking)\b", train$description)))
 
+# En que piso es el apto
+
+### variable de piso
+
+test <- test |>
+  mutate(piso_info = str_extract(description, "(\\w+|\\d+) piso (\\w+|\\d+)")) #palbra o numero que antecede o
+
+# va despues
+
+numeros_escritos <- c("uno|primero|primer", "dos|segundo|segund", "tres|tercero|tercer", "cuatro|cuarto", "cinco|quinto", "seis|sexto", "siete|septimo", "ocho|octavo", "nueve|noveno", "diez|decimo|dei")
+numeros_numericos <- as.character(1:10)
+
+test <- test %>%
+  mutate(piso_info = str_replace_all(piso_info, setNames(numeros_numericos,numeros_escritos))) # set names empareja
+
+# ahora me quedo con el numero
+
+test <- test |>
+  mutate(piso_numerico = as.integer(str_extract(piso_info, "\\d+")))
+
+# Medida de proteccion
+test <- test |>
+  mutate(piso_numerico = ifelse(piso_numerico > 20, NA, piso_numerico))
+
+
+
 # Dummy de penthouse
 
 
@@ -61,6 +87,7 @@ train <- train |>
 
 
 #Distacia parques
+
 
 #estrato si es posible
 
