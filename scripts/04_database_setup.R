@@ -84,12 +84,16 @@ train <- train |>
 # Distancia a chapinero o al centro
 
 
+
 # Imputaciones
 
 
 
 # Variables externas de mapas
 
+# Determinamos el centro del mapa 
+latitud_central <- mean(train$lat)
+longitud_central <- mean(train$lon)
 
 # Distancia transmi
 
