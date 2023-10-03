@@ -11,9 +11,6 @@ train <-   as.data.frame(import("stores/train.csv"))
 template <- as.data.frame(import("stores/submission_template.csv")) 
 test <- as.data.frame(import("stores/test.csv")) 
 
-#
-
-
 # Que tenemos
 
 colnames(train)
@@ -41,6 +38,9 @@ train <- train |>
 
 ### variable de piso
 
+train <- train |>
+  mutate(piso_info = str_extract(description, "(\\w+|\\d+) piso (\\w+|\\d+)")) #palbra o numero que antecede o
+
 test <- test |>
   mutate(piso_info = str_extract(description, "(\\w+|\\d+) piso (\\w+|\\d+)")) #palbra o numero que antecede o
 
@@ -49,19 +49,27 @@ test <- test |>
 numeros_escritos <- c("uno|primero|primer", "dos|segundo|segund", "tres|tercero|tercer", "cuatro|cuarto", "cinco|quinto", "seis|sexto", "siete|septimo", "ocho|octavo", "nueve|noveno", "diez|decimo|dei")
 numeros_numericos <- as.character(1:10)
 
+train <- train %>%
+  mutate(piso_info = str_replace_all(piso_info, setNames(numeros_numericos,numeros_escritos))) # set names empareja
+
 test <- test %>%
   mutate(piso_info = str_replace_all(piso_info, setNames(numeros_numericos,numeros_escritos))) # set names empareja
 
 # ahora me quedo con el numero
 
+train <- train |>
+  mutate(piso_numerico = as.integer(str_extract(piso_info, "\\d+")))
+
 test <- test |>
   mutate(piso_numerico = as.integer(str_extract(piso_info, "\\d+")))
 
 # Medida de proteccion
-test <- test |>
+
+train <- train |>
   mutate(piso_numerico = ifelse(piso_numerico > 20, NA, piso_numerico))
 
-
+test <- test |>
+  mutate(piso_numerico = ifelse(piso_numerico > 20, NA, piso_numerico))
 
 # Dummy de penthouse
 
