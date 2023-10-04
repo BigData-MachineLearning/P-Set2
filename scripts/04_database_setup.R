@@ -90,12 +90,6 @@ test <- test |>
       #=================================#
 
 
-# Determinamos el centro del mapa 
-latitud_central <- mean(train$lat)
-longitud_central <- mean(train$lon)
-
-latitud_central <- mean(test$lat)
-longitud_central <- mean(test$lon)
 
 # Distancia a chapinero o al centro
 

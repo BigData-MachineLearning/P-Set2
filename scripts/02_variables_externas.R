@@ -1,7 +1,16 @@
 ##
 
+# Determinamos el centro del mapa 
+latitud_central <- mean(train$lat)
+longitud_central <- mean(train$lon)
 
-# Extraemos la info de las estaciones del MIO
+latitud_central <- mean(test$lat)
+longitud_central <- mean(test$lon)
+
+
+
+
+# Extraemos la info de las estaciones del Transmi
 parada_de_bus <- opq(bbox = getbb("Bogotá Colombia")) %>%
   add_osm_feature(key ='amenity' , value = 'bus_station') 
 # Cambiamos el formato para que sea un objeto sf (simple features)
