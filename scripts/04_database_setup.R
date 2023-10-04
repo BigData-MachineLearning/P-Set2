@@ -113,7 +113,7 @@ longitud_central <- mean(test$lon)
 #Estrato si es posible
 
 
-
+# imputaciones
 
 
 
