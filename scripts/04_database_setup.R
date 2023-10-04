@@ -89,8 +89,9 @@ test <- test |>
       ##### === 3.External VARS === #####
       #=================================#
 
+#script que jala info antes de sacar variables
 
-
+source("scripts/02_variables_externas.R")
 # Distancia a chapinero o al centro
 
 
@@ -98,12 +99,12 @@ test <- test |>
 
 # Calculamos las distancias al paradero mas cercano
 
-nearest <- st_nearest_feature(train_sf,centroides_sf)
+nearest_bus <- st_nearest_feature(train_sf,centroides_bus_sf)
 
-train<- train %>% mutate(distancia_bus=st_distance(x = train_sf, y = centroides_sf[nearest,], by_element=TRUE))
+train<- train %>% mutate(distancia_bus=st_distance(x = train_sf, y = centroides_bus_sf[nearest_bus,], by_element=TRUE))
 
-nearest <- st_nearest_feature(test_sf,centroides_sf)
-test<- test %>% mutate(distancia_bus=st_distance(x = test_sf, y = centroides_sf[nearest,], by_element=TRUE))
+nearest_bus <- st_nearest_feature(test_sf,centroides_bus_sf)
+test<- test %>% mutate(distancia_bus=st_distance(x = test_sf, y = centroides_bus_sf[nearest_bus,], by_element=TRUE))
 
 
 #Distancia Centros comerciales
