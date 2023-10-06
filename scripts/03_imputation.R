@@ -45,4 +45,58 @@ test <- test |>
   select(-c(surface_extr, surface_nums))
 
 #
+train$surface_total <- ifelse(is.na(train$surface_covered), train$surface_total, train$surface_covered)
+
+test$surface_total <- ifelse(is.na(test$surface_covered), test$surface_total, test$surface_covered)
+
+# Imputacion rooms
+
+train <- train |>
+  mutate(rooms_extr = str_extract(description, 
+                                  "\\b(\\d+|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s*(?:habitacion|habitaciones|cuarto|cuartos|alcoba|alcobas)\\b"
+  )) #palbra o numero que antecede o
+
+test <- test |>
+  mutate(rooms_extr = str_extract(description, 
+                                  "\\b(\\d+|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s*(?:habitacion|habitaciones|cuarto|cuartos|alcoba|alcobas)\\b"
+  )) #palbra o numero que antecede o
+
+numeros_escritos <- c("uno|primero|primer", "dos|segundo|segund", "tres|tercero|tercer", "cuatro|cuarto", "cinco|quinto", "seis|sexto", "siete|septimo", "ocho|octavo", "nueve|noveno", "diez|decimo|dei")
+numeros_numericos <- as.character(1:10)
+
+train <- train %>%
+  mutate(piso_info = str_replace_all(rooms_extr, setNames(numeros_numericos,numeros_escritos))) # set names empareja
+
+test <- test %>%
+  mutate(piso_info = str_replace_all(rooms_extr, setNames(numeros_numericos,numeros_escritos))) # set names empareja
+
+# ahora me quedo con el numero
+
+train <- train |>
+  mutate(rooms_nums = as.integer(str_extract(rooms_extr, "\\d+")))
+
+test <- test |>
+  mutate(rooms_nums = as.integer(str_extract(rooms_extr, "\\d+")))
+
+
+# Medida de proteccion
+train <- train |>
+  mutate(rooms_nums = ifelse(rooms_nums > 6, NA, rooms_nums))
+
+test <- test |>
+  mutate(rooms_nums = ifelse(rooms_nums > 6, NA, rooms_nums))
+
+# Imputo
+
+train$rooms <- ifelse(is.na(train$rooms), train$rooms_nums, train$)
+
+test$rooms <- ifelse(is.na(test$rooms), test$rooms_nums, test$rooms)
+
+# result =
+18260 - sum(is.na(train$rooms))
+train <- train |>
+  select(-c(rooms_extr, rooms_nums))
+
+test <- test |>
+  select(-c(rooms_extr, rooms_nums))
 
