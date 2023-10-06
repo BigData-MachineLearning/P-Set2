@@ -48,8 +48,45 @@ ciclovias <-st_read("stores/ciclovias")
 ciclovias<-st_transform(ciclovias,4326)
 
 
-distances <- st_distance(train_sf, ciclovias)
+distances_train <- st_distance(train_sf, ciclovias)
+distances_test <- st_distance(test_sf, ciclovias)
 
 # Find the minimum distance for each apartment
-min_distances <- apply(distances, 1, min)
-train$ciclovia_near <- min_distances
+min_distances_train <- apply(distances_train, 1, min)
+train$ciclovia_near <- min_distances_train
+
+min_distances_test <- apply(distances_test, 1, min)
+test$ciclovia_near <- min_distances_test
+
+
+#Parques
+
+#parques
+# Extraemos la info de todos los parques de Bogota
+parques <- opq(bbox = getbb("Bogotá Colombia")) %>%
+  add_osm_feature(key = "leisure" , value = "park") 
+# Cambiamos el formato para que sea un objeto sf (simple features)
+parques_sf <- osmdata_sf(parques)
+
+# De las features del parque nos interesa su geomoetría y donde estan ubicados 
+parques_geometria <- parques_sf$osm_polygons %>% 
+  select(osm_id, name)
+
+# Calculamos el centroide de cada parque para aproximar s ubciacion como un solo punto 
+centroides <- gCentroid(as(parques_geometria$geometry, "Spatial"), byid = T)
+
+# convertimos los scontroides a formato sf(simple features)
+centroides_sf <- st_as_sf(centroides, coords = c("x", "y"))
+# Esto va a ser demorado!
+# Calculamos las diatnacias para cada combinacion immueble - parque
+dist_matrix_train <- st_distance(x = train_sf, y = centroides_sf)
+dist_matrix_test <- st_distance(x = test_sf, y = centroides_sf)
+
+# Encontramos la distancia mínima a un parque
+dist_min <- apply(dist_matrix_train, 1, min)
+
+# La agregamos como variablea nuestra base de datos original 
+train <- train %>% mutate(distancia_parque = dist_min)
+
+dist_min <- apply(dist_matrix_test, 1, min)
+test <- test %>% mutate(distancia_parque = dist_min)
