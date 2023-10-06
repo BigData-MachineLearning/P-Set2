@@ -40,8 +40,3 @@ test$surface_total <- ifelse(is.na(test$surface_total), test$surface_nums, test$
 30079 - sum(is.na(train$surface_total))
 
 
-
-
-
-
-

@@ -38,3 +38,18 @@ centroides_bus_sf <- do.call(rbind, st_geometry(centroides_bus)) |>
 # centroides coords y crs
 centroides_bus_sf <- st_as_sf(centroides_bus_sf, coords = c("lon", "lat"), crs=4326)
 
+# Distancia ciclovias
+
+train_sf <- st_as_sf(train, coords = c("lon", "lat") , crs = 4326)
+test_sf <- st_as_sf(test, coords = c("lon", "lat") , crs = 4326)
+
+ciclovias <-st_read("stores/ciclovias")
+
+ciclovias<-st_transform(ciclovias,4326)
+
+
+distances <- st_distance(train_sf, ciclovias)
+
+# Find the minimum distance for each apartment
+min_distances <- apply(distances, 1, min)
+train$ciclovia_near <- min_distances
