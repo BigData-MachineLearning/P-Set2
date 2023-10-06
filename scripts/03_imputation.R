@@ -36,7 +36,13 @@ train$surface_total <- ifelse(is.na(train$surface_total), train$surface_nums, tr
 
 test$surface_total <- ifelse(is.na(test$surface_total), test$surface_nums, test$surface_total)
 
-# result = 7601 imputados, podría mejorar con info de 
+# result = 6353 imputados, podría mejorar 
 30079 - sum(is.na(train$surface_total))
+train <- train |>
+  select(-c(surface_extr, surface_nums))
 
+test <- test |>
+  select(-c(surface_extr, surface_nums))
+
+#
 

@@ -7,8 +7,8 @@ longitud_central <- mean(train$lon)
 latitud_central <- mean(test$lat)
 longitud_central <- mean(test$lon)
 
-
-
+train_sf <- st_as_sf(train, coords = c("lon", "lat") , crs = 4326)
+test_sf <- st_as_sf(test, coords = c("lon", "lat") , crs = 4326)
 
 # Extraemos la info de las estaciones del Transmi
 parada_de_bus <- opq(bbox = getbb("Bogotá Colombia")) %>%
@@ -25,6 +25,14 @@ parada_de_bus_sf_geometria <- parada_de_bus_sf$osm_polygons %>%
 #centroides <- gCentroid(as(parada_de_bus_sf_geometria$geometry, "Spatial"), byid = T)
 centroides_bus <-st_centroid(parada_de_bus_sf_geometria$geometry)
 
+# centroides de distancia a transmi
+
+centroides_bus_sf <- do.call(rbind, st_geometry(centroides_bus)) |>
+  as_tibble() |> setNames(c("lon", "lat"))
+
+# centroides coords y crs
+centroides_bus_sf <- st_as_sf(centroides_bus_sf, coords = c("lon", "lat"), crs=4326)
+
 nearest_bus <- st_nearest_feature(train_sf,centroides_bus_sf)
 
 train<- train %>% mutate(distancia_bus=st_distance(x = train_sf, y = centroides_bus_sf[nearest_bus,], by_element=TRUE))
@@ -34,15 +42,8 @@ test<- test %>% mutate(distancia_bus=st_distance(x = test_sf, y = centroides_bus
 
 # variable distanmcia a transmi
 
-train_sf <- st_as_sf(train, coords = c("lon", "lat") , crs = 4326)
-test_sf <- st_as_sf(test, coords = c("lon", "lat") , crs = 4326)
-# centroides de distancia a transmi
 
-centroides_bus_sf <- do.call(rbind, st_geometry(centroides_bus)) |>
-  as_tibble() |> setNames(c("lon", "lat"))
 
-# centroides coords y crs
-centroides_bus_sf <- st_as_sf(centroides_bus_sf, coords = c("lon", "lat"), crs=4326)
 
 # Distancia ciclovias
 

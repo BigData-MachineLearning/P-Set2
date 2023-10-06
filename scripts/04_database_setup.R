@@ -99,15 +99,9 @@ source("scripts/02_variables_externas.R")
 
 # Calculamos las distancias al paradero mas cercano
 
-
 #Distancia ciclovias
 
-
 #Distancia Centros comerciales
-
-
-
-
 
 #Distacia parques
 
