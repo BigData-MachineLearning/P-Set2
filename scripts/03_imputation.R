@@ -53,7 +53,7 @@ test$surface_total <- ifelse(is.na(test$surface_covered), test$surface_total, te
 
 train <- train |>
   mutate(rooms_extr = str_extract(description, 
-                                  "\\b(\\d+|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s*(?:habitacion|habitaciones|cuarto|cuartos|alcoba|alcobas)\\b"
+                                  "\\b(\\d+|uno|una|un|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s*(?:habitacion|habitaciones|cuarto|cuartos|alcoba|alcobas)\\b"
   )) #palbra o numero que antecede o
 
 test <- test |>
@@ -100,4 +100,58 @@ train <- train |>
 test <- test |>
   select(-c(rooms_extr, rooms_nums))
 
-# imputacion baños
+# Imputacion bathrooms
+
+train <- train |>
+  mutate(bathrooms_extr = str_extract(description, 
+                                      "\\b(\\d+|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s*(?:bano|banos|sanitario|sanitarios)\\b"
+  )) #palbra o numero que antecede o
+
+test <- test |>
+  mutate(bathrooms_extr = str_extract(description, 
+                                      "\\b(\\d+|uno|una|un|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s*(?:bano|banos|sanitario|sanitarios)\\b"
+  )) #palbra o numero que antecede o
+
+numeros_escritos <- c("uno|primero|primer|un|una", "dos|segundo|segund", "tres|tercero|tercer", "cuatro|cuarto", "cinco|quinto", "seis|sexto", "siete|septimo", "ocho|octavo", "nueve|noveno", "diez|decimo|dei")
+numeros_numericos <- as.character(1:10)
+
+train <- train %>%
+  mutate(bathrooms_extr = str_replace_all(bathrooms_extr, setNames(numeros_numericos,numeros_escritos))) # set names empareja
+
+test <- test %>%
+  mutate(bathrooms_extr = str_replace_all(bathrooms_extr, setNames(numeros_numericos,numeros_escritos))) # set names empareja
+
+# ahora me quedo con el numero
+
+train <- train |>
+  mutate(bathrooms_nums = as.integer(str_extract(bathrooms_extr, "\\d+")))
+
+test <- test |>
+  mutate(bathrooms_nums = as.integer(str_extract(bathrooms_extr, "\\d+")))
+
+
+# Medida de proteccion
+train <- train |>
+  mutate(bathrooms_nums = ifelse(bathrooms_nums > 6, NA, bathrooms_nums))
+
+test <- test |>
+  mutate(bathrooms_nums = ifelse(bathrooms_nums > 6, NA, bathrooms_nums))
+
+# Imputo
+
+train$bathrooms <- ifelse(is.na(train$bathrooms), train$bathrooms_nums, train$bathrooms)
+
+test$bathrooms <- ifelse(is.na(test$bathrooms), test$bathrooms_nums, test$bathrooms)
+
+# result = 3930 imputados, bien
+10071 - sum(is.na(train$bathrooms))
+train <- train |>
+  select(-c(bathrooms_extr, bathrooms_nums))
+
+test <- test |>
+  select(-c(bathrooms_extr, bathrooms_nums))
+
+
+
+
+

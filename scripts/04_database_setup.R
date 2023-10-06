@@ -113,10 +113,8 @@ source("scripts/02_variables_externas.R")
 
 source("scripts/03_imputation.R")
 
-
-
-
-
+train$bedrooms <- ifelse(!is.na(train$bedrooms) & train$bedrooms != train$rooms, train$rooms, train$bedrooms)
+test$bedrooms <- ifelse(!is.na(test$bedrooms) & test$bedrooms != test$rooms, test$rooms, test$bedrooms)
 
 
 
