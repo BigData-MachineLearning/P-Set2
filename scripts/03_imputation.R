@@ -58,17 +58,17 @@ train <- train |>
 
 test <- test |>
   mutate(rooms_extr = str_extract(description, 
-                                  "\\b(\\d+|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s*(?:habitacion|habitaciones|cuarto|cuartos|alcoba|alcobas)\\b"
+                                  "\\b(\\d+|uno|una|un|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s*(?:habitacion|habitaciones|cuarto|cuartos|alcoba|alcobas)\\b"
   )) #palbra o numero que antecede o
 
-numeros_escritos <- c("uno|primero|primer", "dos|segundo|segund", "tres|tercero|tercer", "cuatro|cuarto", "cinco|quinto", "seis|sexto", "siete|septimo", "ocho|octavo", "nueve|noveno", "diez|decimo|dei")
+numeros_escritos <- c("uno|primero|primer|un|una", "dos|segundo|segund", "tres|tercero|tercer", "cuatro|cuarto", "cinco|quinto", "seis|sexto", "siete|septimo", "ocho|octavo", "nueve|noveno", "diez|decimo|dei")
 numeros_numericos <- as.character(1:10)
 
 train <- train %>%
-  mutate(piso_info = str_replace_all(rooms_extr, setNames(numeros_numericos,numeros_escritos))) # set names empareja
+  mutate(rooms_extr = str_replace_all(rooms_extr, setNames(numeros_numericos,numeros_escritos))) # set names empareja
 
 test <- test %>%
-  mutate(piso_info = str_replace_all(rooms_extr, setNames(numeros_numericos,numeros_escritos))) # set names empareja
+  mutate(rooms_extr = str_replace_all(rooms_extr, setNames(numeros_numericos,numeros_escritos))) # set names empareja
 
 # ahora me quedo con el numero
 
@@ -88,11 +88,11 @@ test <- test |>
 
 # Imputo
 
-train$rooms <- ifelse(is.na(train$rooms), train$rooms_nums, train$)
+train$rooms <- ifelse(is.na(train$rooms), train$rooms_nums, train$rooms)
 
 test$rooms <- ifelse(is.na(test$rooms), test$rooms_nums, test$rooms)
 
-# result =
+# result = 12738 imputados, bien
 18260 - sum(is.na(train$rooms))
 train <- train |>
   select(-c(rooms_extr, rooms_nums))
@@ -100,3 +100,4 @@ train <- train |>
 test <- test |>
   select(-c(rooms_extr, rooms_nums))
 
+# imputacion baños
