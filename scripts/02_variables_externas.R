@@ -25,6 +25,12 @@ parada_de_bus_sf_geometria <- parada_de_bus_sf$osm_polygons %>%
 #centroides <- gCentroid(as(parada_de_bus_sf_geometria$geometry, "Spatial"), byid = T)
 centroides_bus <-st_centroid(parada_de_bus_sf_geometria$geometry)
 
+nearest_bus <- st_nearest_feature(train_sf,centroides_bus_sf)
+
+train<- train %>% mutate(distancia_bus=st_distance(x = train_sf, y = centroides_bus_sf[nearest_bus,], by_element=TRUE))
+
+nearest_bus <- st_nearest_feature(test_sf,centroides_bus_sf)
+test<- test %>% mutate(distancia_bus=st_distance(x = test_sf, y = centroides_bus_sf[nearest_bus,], by_element=TRUE))
 
 # variable distanmcia a transmi
 
@@ -90,3 +96,34 @@ train <- train %>% mutate(distancia_parque = dist_min)
 
 dist_min <- apply(dist_matrix_test, 1, min)
 test <- test %>% mutate(distancia_parque = dist_min)
+
+
+# Centros comerciales 
+# Extraemos la info de todos los parques de Bogota
+centros_com <- opq(bbox = getbb("Bogotá Colombia")) %>%
+  add_osm_feature(key = "shop" , value = "mall") 
+# Cambiamos el formato para que sea un objeto sf (simple features)
+centros_com_sf <- osmdata_sf(centros_com)
+
+# De las features del parque nos interesa su geomoetría y donde estan ubicados 
+centros_com_geometria <- centros_com_sf$osm_polygons %>% 
+  select(osm_id, name)
+
+# Calculamos el centroide de cada parque para aproximar s ubciacion como un solo punto 
+centroides <- gCentroid(as(centros_com_geometria$geometry, "Spatial"), byid = T)
+
+# convertimos los scontroides a formato sf(simple features)
+centroides_sf <- st_as_sf(centroides, coords = c("x", "y"))
+# Esto va a ser demorado!
+# Calculamos las diatnacias para cada combinacion immueble - parque
+dist_matrix_train <- st_distance(x = train_sf, y = centroides_sf)
+dist_matrix_test <- st_distance(x = test_sf, y = centroides_sf)
+
+# Encontramos la distancia mínima a un parque
+dist_min <- apply(dist_matrix_train, 1, min)
+
+# La agregamos como variablea nuestra base de datos original 
+train <- train %>% mutate(distancia_cc = dist_min)
+
+dist_min <- apply(dist_matrix_test, 1, min)
+test <- test %>% mutate(distancia_cc = dist_min)

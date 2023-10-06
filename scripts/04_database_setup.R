@@ -99,12 +99,6 @@ source("scripts/02_variables_externas.R")
 
 # Calculamos las distancias al paradero mas cercano
 
-nearest_bus <- st_nearest_feature(train_sf,centroides_bus_sf)
-
-train<- train %>% mutate(distancia_bus=st_distance(x = train_sf, y = centroides_bus_sf[nearest_bus,], by_element=TRUE))
-
-nearest_bus <- st_nearest_feature(test_sf,centroides_bus_sf)
-test<- test %>% mutate(distancia_bus=st_distance(x = test_sf, y = centroides_bus_sf[nearest_bus,], by_element=TRUE))
 
 #Distancia ciclovias
 
