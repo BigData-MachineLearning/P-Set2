@@ -1,12 +1,17 @@
-### imputacion
 
+#===========================#
+##### === 0.Set up  === #####
+#===========================#
+
+colSums(is.na(data))
 # Hay missings considerables en:
 
 # bathrooms, rooms, surface_total, surface_covered
 #    10071   18260      # 30079     # 30079
 
-# Imputacion mts2
-
+#===================================#
+##### === 1.Imputacion mts2 === #####
+#===================================#
 train <- train |>
   mutate(surface_extr = str_extract(description, "\\d+\\s*(?:mts2|mt2|mtrs2|m2|ms2|metros\\s*cuadrados)")) #palbra o numero que antecede o
 
@@ -49,8 +54,9 @@ train$surface_total <- ifelse(is.na(train$surface_covered), train$surface_total,
 
 test$surface_total <- ifelse(is.na(test$surface_covered), test$surface_total, test$surface_covered)
 
-# Imputacion rooms
-
+#====================================#
+##### === 2.Imputacion rooms === #####
+#====================================#
 train <- train |>
   mutate(rooms_extr = str_extract(description, 
                                   "\\b(\\d+|uno|una|un|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s*(?:habitacion|habitaciones|cuarto|cuartos|alcoba|alcobas)\\b"
@@ -101,6 +107,9 @@ test <- test |>
   select(-c(rooms_extr, rooms_nums))
 
 # Imputacion bathrooms
+#========================================#
+##### === 3.Imputacion bathrooms === #####
+#========================================#
 
 train <- train |>
   mutate(bathrooms_extr = str_extract(description, 

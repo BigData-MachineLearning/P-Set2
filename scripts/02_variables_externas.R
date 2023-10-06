@@ -1,4 +1,8 @@
-##
+
+
+#===========================#
+##### === 0.Set up  === #####
+#===========================#
 
 # Determinamos el centro del mapa 
 latitud_central <- mean(train$lat)
@@ -9,6 +13,11 @@ longitud_central <- mean(test$lon)
 
 train_sf <- st_as_sf(train, coords = c("lon", "lat") , crs = 4326)
 test_sf <- st_as_sf(test, coords = c("lon", "lat") , crs = 4326)
+
+
+#===========================#
+##### === 1.Transmi === #####
+#===========================#
 
 # Extraemos la info de las estaciones del Transmi
 parada_de_bus <- opq(bbox = getbb("Bogotá Colombia")) %>%
@@ -40,11 +49,9 @@ train<- train %>% mutate(distancia_bus=st_distance(x = train_sf, y = centroides_
 nearest_bus <- st_nearest_feature(test_sf,centroides_bus_sf)
 test<- test %>% mutate(distancia_bus=st_distance(x = test_sf, y = centroides_bus_sf[nearest_bus,], by_element=TRUE))
 
-# variable distanmcia a transmi
-
-
-
-
+#==============================#
+##### === 2.ciclovias  === #####
+#==============================#
 # Distancia ciclovias
 
 train_sf <- st_as_sf(train, coords = c("lon", "lat") , crs = 4326)
@@ -66,7 +73,9 @@ min_distances_test <- apply(distances_test, 1, min)
 test$ciclovia_near <- min_distances_test
 
 
-#Parques
+#============================#
+##### === 3.Parques  === #####
+#============================#
 
 #parques
 # Extraemos la info de todos los parques de Bogota
@@ -99,31 +108,34 @@ dist_min <- apply(dist_matrix_test, 1, min)
 test <- test %>% mutate(distancia_parque = dist_min)
 
 
-# Centros comerciales 
-# Extraemos la info de todos los parques de Bogota
+#=======================================#
+##### === 4.Centros comerciales === #####
+#=======================================#
+
+# Extraemos la info de todos los CCs de Bogota
 centros_com <- opq(bbox = getbb("Bogotá Colombia")) %>%
   add_osm_feature(key = "shop" , value = "mall") 
 # Cambiamos el formato para que sea un objeto sf (simple features)
 centros_com_sf <- osmdata_sf(centros_com)
 
-# De las features del parque nos interesa su geomoetría y donde estan ubicados 
+# De las features del CC nos interesa su geomoetría y donde estan ubicados 
 centros_com_geometria <- centros_com_sf$osm_polygons %>% 
   select(osm_id, name)
 
-# Calculamos el centroide de cada parque para aproximar s ubciacion como un solo punto 
+# Calculamos el centroide de cada CC para aproximar la ubciacion como un solo punto 
 centroides <- gCentroid(as(centros_com_geometria$geometry, "Spatial"), byid = T)
 
 # convertimos los scontroides a formato sf(simple features)
 centroides_sf <- st_as_sf(centroides, coords = c("x", "y"))
 # Esto va a ser demorado!
-# Calculamos las diatnacias para cada combinacion immueble - parque
+# Calculamos las diatnacias para cada combinacion immueble - CC
 dist_matrix_train <- st_distance(x = train_sf, y = centroides_sf)
 dist_matrix_test <- st_distance(x = test_sf, y = centroides_sf)
 
-# Encontramos la distancia mínima a un parque
+# Encontramos la distancia mínima a un CC
 dist_min <- apply(dist_matrix_train, 1, min)
 
-# La agregamos como variablea nuestra base de datos original 
+# La agregamos como variable nuestra base de datos original 
 train <- train %>% mutate(distancia_cc = dist_min)
 
 dist_min <- apply(dist_matrix_test, 1, min)
