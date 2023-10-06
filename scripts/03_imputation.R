@@ -3,7 +3,7 @@
 ##### === 0.Set up  === #####
 #===========================#
 
-colSums(is.na(data))
+colSums(is.na(train))
 # Hay missings considerables en:
 
 # bathrooms, rooms, surface_total, surface_covered

@@ -22,6 +22,9 @@ test <- as.data.frame(import("stores/test.csv"))
 colnames(train)
 skim(train)
 
+# prperty_type numeric
+
+
         #=============================#
         ##### === 2.TEXT VARS === #####
         #=============================#
@@ -120,4 +123,12 @@ train$bedrooms <- ifelse(!is.na(train$bedrooms) & train$bedrooms != train$rooms,
 test$bedrooms <- ifelse(!is.na(test$bedrooms) & test$bedrooms != test$rooms, test$rooms, test$bedrooms)
 
 
+train <- train |> 
+  select(-c(piso_info, description, rooms))
 
+test <- test |> 
+  select(-c(piso_info, description, rooms))
+
+#Export
+rio::export(train, "db_tandas/train_1.csv")
+rio::export(test, "db_tandas/test_1.csv")
