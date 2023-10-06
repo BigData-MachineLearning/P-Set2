@@ -105,9 +105,7 @@ source("scripts/02_variables_externas.R")
 
 #Distacia parques
 
-
 #Estrato si es posible
-
 
 # imputaciones
 
