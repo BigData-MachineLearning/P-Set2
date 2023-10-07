@@ -16,7 +16,31 @@ test_sf <- st_as_sf(test, coords = c("lon", "lat") , crs = 4326)
 
 
 #===========================#
-##### === 1.Transmi === #####
+##### === 1.UPL === #####
+#===========================#
+
+UPL <-st_read("stores/UPL")
+UPL<-st_transform(UPL,4326)
+
+UPL <- UPL |>
+  select(geometry, NOMBRE, CODIGO_UPL) |>
+  rename(UPL = NOMBRE)
+
+train_sf <-  st_join(train_sf, UPL)
+train_sf$lat <- st_coordinates(train_sf)[, "Y"]
+train_sf$lon <- st_coordinates(train_sf)[, "X"]
+
+train <- st_drop_geometry(train_sf)
+
+
+test_sf <-  st_join(test_sf, UPL)
+test_sf$lat <- st_coordinates(test_sf)[, "Y"]
+test_sf$lon <- st_coordinates(test_sf)[, "X"]
+
+test <- st_drop_geometry(test_sf)
+
+#===========================#
+##### === 2.Transmi === #####
 #===========================#
 
 # Extraemos la info de las estaciones del Transmi
@@ -50,7 +74,7 @@ nearest_bus <- st_nearest_feature(test_sf,centroides_bus_sf)
 test<- test %>% mutate(distancia_bus=st_distance(x = test_sf, y = centroides_bus_sf[nearest_bus,], by_element=TRUE))
 
 #==============================#
-##### === 2.ciclovias  === #####
+##### === 3.ciclovias  === #####
 #==============================#
 # Distancia ciclovias
 
@@ -74,7 +98,7 @@ test$ciclovia_near <- min_distances_test
 
 
 #============================#
-##### === 3.Parques  === #####
+##### === 4.Parques  === #####
 #============================#
 
 #parques
@@ -109,7 +133,7 @@ test <- test %>% mutate(distancia_parque = dist_min)
 
 
 #=======================================#
-##### === 4.Centros comerciales === #####
+##### === 5.Centros comerciales === #####
 #=======================================#
 
 # Extraemos la info de todos los CCs de Bogota
@@ -140,3 +164,4 @@ train <- train %>% mutate(distancia_cc = dist_min)
 
 dist_min <- apply(dist_matrix_test, 1, min)
 test <- test %>% mutate(distancia_cc = dist_min)
+
