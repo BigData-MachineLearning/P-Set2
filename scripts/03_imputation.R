@@ -41,6 +41,18 @@ train$surface_total <- ifelse(is.na(train$surface_total), train$surface_nums, tr
 
 test$surface_total <- ifelse(is.na(test$surface_total), test$surface_nums, test$surface_total)
 
+#
+train$surface_total <- ifelse(is.na(train$surface_covered), train$surface_total, train$surface_covered)
+
+test$surface_total <- ifelse(is.na(test$surface_covered), test$surface_total, test$surface_covered)
+
+train <- train |>
+  mutate(surface_total = ifelse(surface_total > 1000, NA, surface_total))
+
+test <- test |>
+  mutate(surface_total = ifelse(surface_total > 1000, NA, surface_total))
+
+
 # result = 6353 imputados, podría mejorar 
 30079 - sum(is.na(train$surface_total))
 train <- train |>
@@ -49,10 +61,7 @@ train <- train |>
 test <- test |>
   select(-c(surface_extr, surface_nums))
 
-#
-train$surface_total <- ifelse(is.na(train$surface_covered), train$surface_total, train$surface_covered)
 
-test$surface_total <- ifelse(is.na(test$surface_covered), test$surface_total, test$surface_covered)
 
 #====================================#
 ##### === 2.Imputacion rooms === #####
@@ -141,16 +150,30 @@ test <- test |>
 
 # Medida de proteccion
 train <- train |>
-  mutate(bathrooms_nums = ifelse(bathrooms_nums > 6, NA, bathrooms_nums))
+  mutate(bathrooms_nums = ifelse(bathrooms_nums > 10, NA, bathrooms_nums))
 
 test <- test |>
-  mutate(bathrooms_nums = ifelse(bathrooms_nums > 6, NA, bathrooms_nums))
+  mutate(bathrooms_nums = ifelse(bathrooms_nums > 10, NA, bathrooms_nums))
 
 # Imputo
 
 train$bathrooms <- ifelse(is.na(train$bathrooms), train$bathrooms_nums, train$bathrooms)
 
 test$bathrooms <- ifelse(is.na(test$bathrooms), test$bathrooms_nums, test$bathrooms)
+
+# Correccion adicional
+
+# Define a function to update 'bathrooms' column
+update_bathrooms <- function(data) {
+  data$bathrooms <- ifelse(is.na(data$bathrooms), 
+                           str_count(data$description, "\\bbano\\b|\\bbanos\\b"), 
+                           data$bathrooms)
+  return(data)
+}
+
+# Update 'bathrooms' column in train and test data frames
+train <- update_bathrooms(train)
+test <- update_bathrooms(test)
 
 # result = 3930 imputados, bien
 10071 - sum(is.na(train$bathrooms))
@@ -159,8 +182,3 @@ train <- train |>
 
 test <- test |>
   select(-c(bathrooms_extr, bathrooms_nums))
-
-
-
-
-
