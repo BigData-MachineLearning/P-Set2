@@ -15,5 +15,8 @@ p_load(tidyverse, # Manipular dataframes
        osmdata, # Get OSM's data 
        tidymodels,
        stringi,
-       skimr) #para modelos de ML
+       skimr,
+       rsample,
+       blockCV,
+       spatialsample) #para modelos de ML
 

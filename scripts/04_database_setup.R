@@ -24,7 +24,12 @@ skim(train)
 
 # prperty_type numeric
 
+train <- train %>%
+  mutate(property_type2 = ifelse(property_type == "Apartamento", 0, 1))
 
+# Assuming you have a 'test' data frame
+test <- test %>%
+  mutate(property_type2 = ifelse(property_type == "Apartamento", 0, 1))
         #=============================#
         ##### === 2.TEXT VARS === #####
         #=============================#
