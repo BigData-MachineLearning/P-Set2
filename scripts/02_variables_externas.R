@@ -165,3 +165,6 @@ train <- train %>% mutate(distancia_cc = dist_min)
 dist_min <- apply(dist_matrix_test, 1, min)
 test <- test %>% mutate(distancia_cc = dist_min)
 
+#Finalizo y limpio ws
+rm(list=ls()[! ls() %in% c("train","test", "longitud_central", "latitud_central", 
+                           "train_sf", "test_sf" )])

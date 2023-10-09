@@ -182,3 +182,30 @@ train <- train |>
 
 test <- test |>
   select(-c(bathrooms_extr, bathrooms_nums))
+
+# Imputando por el más cercano
+
+# variable de costo metro cuadrado 
+train <- train |>
+  mutate(pmt2 = price/surface_total)
+
+
+# Filter out appartments where pmt2 is empty
+train_nonempty <- train[!is.na(train$pmt2),]
+
+# Calculate distance matrix between all appartments
+dist_matrix <- distm(train[,c("lon", "lat")], train_nonempty[,c("lon", "lat")])
+
+# Find index of closest appartment where pmt2 is not empty
+closest_index <- apply(dist_matrix, 1, which.min)
+
+# Find value of closest appartment where pmt2 is not empty
+closest_value <- train_nonempty$pmt2[closest_index]
+
+# Replace NA values in pmt2 with closest values
+train$pmt2 <- replace(train$pmt2, is.na(train$pmt2), closest_value)
+
+# Calculamos el area en los missings
+
+train <- train |>
+  mutate(surface_total = ifelse(is.na(surface_total), price/pmt2, surface_total))

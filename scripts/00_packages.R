@@ -18,5 +18,6 @@ p_load(tidyverse, # Manipular dataframes
        skimr,
        rsample,
        blockCV,
-       spatialsample) #para modelos de ML
+       spatialsample,
+       geosphere) #para modelos de ML
 
