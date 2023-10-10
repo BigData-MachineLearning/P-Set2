@@ -2,6 +2,10 @@
 
 rm(list = ls())
 
+        #============================#
+        ##### === 0.PACKAGES === #####
+        #============================#
+
 # Esto es un script que carga los paquetes
 source("scripts/00_packages.R")
 
@@ -11,32 +15,42 @@ train <-   as.data.frame(import("stores/train.csv"))
 template <- as.data.frame(import("stores/submission_template.csv")) 
 test <- as.data.frame(import("stores/test.csv")) 
 
-# Que tenemos
+        #==============================#
+        ##### === 1.FIRST LOOK === #####
+        #==============================#
 
 colnames(train)
 skim(train)
 
-# Anlisis missings
+# prperty_type numeric
+
+train <- train %>%
+  mutate(property_type2 = ifelse(property_type == "Apartamento", 0, 1))
+
+# Assuming you have a 'test' data frame
+test <- test %>%
+  mutate(property_type2 = ifelse(property_type == "Apartamento", 0, 1))
+        #=============================#
+        ##### === 2.TEXT VARS === #####
+        #=============================#
 
 
-# Variables texto
-
+rm(db)
 # Este es el script que limpia inicialmente los datos de texto
 
 source("scripts/01_clean_desc.R")
 
 # Variables externas texto descripcion
 
-# Agrego las variables basado en lo que vi en mi nube de palabras
+          ### === Dummy Parqueadero === ###
+
 test <- test |> 
   mutate(parqueadero = as.numeric(grepl("\\b(parqueadero|garaje|parking)\\b", test$description)))
 
 train <- train |> 
   mutate(parqueadero = as.numeric(grepl("\\b(parqueadero|garaje|parking)\\b", train$description)))
 
-# En que piso es el apto
-
-### variable de piso
+          ### === En que piso es el apto === ###
 
 train <- train |>
   mutate(piso_info = str_extract(description, "(\\w+|\\d+) piso (\\w+|\\d+)")) #palbra o numero que antecede o
@@ -71,56 +85,55 @@ train <- train |>
 test <- test |>
   mutate(piso_numerico = ifelse(piso_numerico > 20, NA, piso_numerico))
 
-# Dummy de penthouse
+### === Dummy Penthouse === ###
 
-# Agrego las variables basado en lo que vi en mi nube de palabras
+train <- train |> 
+  mutate(pent_house = as.numeric(grepl("\\b(parqueadero|garaje|parking|parqueo|garajes)\\b", train$description)))
+
 test <- test |> 
   mutate(pent_house = as.numeric(grepl("\\b(penthouse|pent house|penthause|pent hause)\\b", test$description)))
 
-train <- train |> 
-  mutate(pent_house = as.numeric(grepl("\\b(parqueadero|garaje|parking)\\b", train$description)))
+      #=================================#
+      ##### === 3.External VARS === #####
+      #=================================#
+      
+#script que jala info antes de sacar variables
 
-
+source("scripts/02_variables_externas.R")
 # Distancia a chapinero o al centro
 
 
-
-# Imputaciones
-
-
-
-# Variables externas de mapas
-
-# Determinamos el centro del mapa 
-latitud_central <- mean(train$lat)
-longitud_central <- mean(train$lon)
-
-latitud_central <- mean(test$lat)
-longitud_central <- mean(test$lon)
 # Distancia transmi
 
-
-#Distancia Centros comerciales
-
-
+# Calculamos las distancias al paradero mas cercano
 
 #Distancia ciclovias
 
-
+#Distancia Centros comerciales
 
 #Distacia parques
 
+#Estrato si es posible
 
-#estrato si es posible
-
-
-
-
-
+      #================================#
+      ##### === 4.Imputaciones === #####
+      #================================#
 
 
+source("scripts/03_imputation.R")
+
+# Termino de corregir los cuartos/habitaciones
+
+train$bedrooms <- ifelse(!is.na(train$bedrooms) & train$bedrooms != train$rooms, train$rooms, train$bedrooms)
+test$bedrooms <- ifelse(!is.na(test$bedrooms) & test$bedrooms != test$rooms, test$rooms, test$bedrooms)
 
 
+train <- train |> 
+  select(-c(piso_info, description, rooms))
 
+test <- test |> 
+  select(-c(piso_info, description, rooms))
 
-
+#Export
+rio::export(train, "db_tandas/train_1.csv")
+rio::export(test, "db_tandas/test_1.csv")
