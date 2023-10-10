@@ -43,4 +43,4 @@ Contiene todos los scrips del taller que se corren para hacer las predicciones. 
 - `05_models.R` <- Ejecuta modelos para predecir los precios y guarda los resultados.
 
 `document`:
-Documento de trabajo final.
+Documento de trabajo final
