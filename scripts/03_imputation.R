@@ -214,6 +214,20 @@ train$pmt2 <- replace(train$pmt2, is.na(train$pmt2), closest_value)
 train <- train |>
   mutate(surface_total = ifelse(is.na(surface_total), price/pmt2, surface_total))
 
+# En test no puedo hacer ese proceso ya que no hay variable de precio, utilizamos la variable de media de area por UPL.
+neighborhood_means_test <- test %>%
+  group_by(UPL) %>%
+  summarize(mean_surface = mean(surface_total, na.rm = TRUE)) %>%
+  ungroup()
+
+
+
+# Step 2: Replace missing values in surface_total with the mean of the group they belong to in the test dataframe
+test <- test %>%
+  left_join(neighborhood_means_test, by = "UPL") %>%
+  mutate(surface_total = ifelse(is.na(surface_total), mean_surface, surface_total)) %>%
+  select(-mean_surface)
+
 # with new data
 
 train <- train %>%

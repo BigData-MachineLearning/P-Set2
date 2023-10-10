@@ -35,7 +35,7 @@ test <- test %>%
         #=============================#
 
 
-rm(db)
+
 # Este es el script que limpia inicialmente los datos de texto
 
 source("scripts/01_clean_desc.R")
