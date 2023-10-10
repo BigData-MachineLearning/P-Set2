@@ -73,6 +73,8 @@ train<- train %>% mutate(distancia_bus=st_distance(x = train_sf, y = centroides_
 nearest_bus <- st_nearest_feature(test_sf,centroides_bus_sf)
 test<- test %>% mutate(distancia_bus=st_distance(x = test_sf, y = centroides_bus_sf[nearest_bus,], by_element=TRUE))
 
+train$distancia_bus <- as.numeric(train$distancia_bus)
+test$distancia_bus <- as.numeric(test$distancia_bus)
 #==============================#
 ##### === 3.ciclovias  === #####
 #==============================#
