@@ -183,7 +183,11 @@ train <- train |>
 test <- test |>
   select(-c(bathrooms_extr, bathrooms_nums))
 
-# Imputando por el más cercano
+
+#================================================#
+##### === 4.Imputando por el más cercano === #####
+#================================================#
+# 
 
 # variable de costo metro cuadrado 
 train <- train |>
@@ -209,3 +213,56 @@ train$pmt2 <- replace(train$pmt2, is.na(train$pmt2), closest_value)
 
 train <- train |>
   mutate(surface_total = ifelse(is.na(surface_total), price/pmt2, surface_total))
+
+# with new data
+
+train <- train %>%
+  mutate(band = cut(surface_total, breaks = c(0, 100, 200, 300, Inf),
+                    labels = c("<100", "100-200", "200-300", "300+"),
+                    right = FALSE))
+
+test <- test %>%
+  mutate(band = cut(surface_total, breaks = c(0, 100, 200, 300, Inf),
+                    labels = c("<100", "100-200", "200-300", "300+"),
+                    right = FALSE))
+
+# Replace 0 in bedrooms as missing (NA)
+train$bedrooms[train$bedrooms == 0] <- NA
+
+test$bedrooms[test$bedrooms == 0] <- NA
+
+#Mode function
+
+Mode <- function(x) {
+  x <- x[!is.na(x)]  # Remove missing values
+  if (length(x) == 0) {
+    return(NA)       # Return NA if all values are missing
+  }
+  unique_values <- unique(x)
+  counts <- table(x)
+  max_count <- max(counts)
+  mode_values <- unique_values[counts == max_count]
+  return(mode_values)
+}
+
+# Impute bathrooms according to bands with the mode within its band
+train <- train %>%
+  group_by(band) %>%
+  mutate(bathrooms = ifelse(is.na(bathrooms), Mode(bathrooms), bathrooms)) %>%
+  ungroup()
+
+test <- test %>%
+  group_by(band) %>%
+  mutate(bathrooms = ifelse(is.na(bathrooms), Mode(bathrooms), bathrooms)) %>%
+  ungroup()
+
+#  Impute bedrooms according to bands with the mode within its band
+train <- train %>%
+  group_by(band) %>%
+  mutate(bedrooms = ifelse(is.na(bedrooms), Mode(bedrooms), bedrooms)) %>%
+  ungroup()
+
+test <- test %>%
+  group_by(band) %>%
+  mutate(bedrooms = ifelse(is.na(bedrooms), Mode(bedrooms), bedrooms)) %>%
+  ungroup()
