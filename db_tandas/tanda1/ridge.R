@@ -92,7 +92,7 @@ rio::export(submission_ridge_1, "results/tanda1_modelo1.csv")
 ############################ === Ridge Dos=== ##################################
 # =============================================================================#
 
-# In Excel: NO
+# In Excel: YES
 
 # Subitted (10/11/2023)
 # Nicolas
