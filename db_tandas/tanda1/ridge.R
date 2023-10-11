@@ -8,8 +8,8 @@
 # Subitted (10/10/2023)
 # Jorge
 
-train <- import("db_tandas/train_1.csv")
-test <- import("db_tandas/test_1.csv")
+train <- import("db_tandas/tanda1/train_1.csv")
+test <- import("db_tandas/tanda1/test_1.csv")
 
 # grid para cuadrar el lambda
 
@@ -55,7 +55,7 @@ train_sf <- st_as_sf(
 set.seed(123)
 block_folds <- spatial_block_cv(train_sf, v = 5)
 
-autoplot(block_folds)
+#autoplot(block_folds)
 
 #Entreno
 

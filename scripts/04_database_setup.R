@@ -130,5 +130,5 @@ test$bedrooms <- ifelse(!is.na(test$bedrooms) & test$bedrooms != test$rooms, tes
 
 
 #Export
-rio::export(train, "db_tandas/train_1.csv")
-rio::export(test, "db_tandas/test_1.csv")
+rio::export(train, "db_tandas/tanda1/train_1.csv")
+rio::export(test, "db_tandas/tanda1/test_1.csv")
