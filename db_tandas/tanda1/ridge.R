@@ -181,7 +181,7 @@ rio::export(submission_ridge_1, "results/tanda1_modelo2.csv")
 # In Excel: YES
 
 # Subitted (10/11/2023)
-# Nicolas
+# Daniel
 
 # grid para cuadrar el lambda
 
@@ -266,7 +266,7 @@ rio::export(submission_ridge_1, "results/tanda1_modelo3.csv")
 # In Excel: YES
 
 # Subitted (10/11/2023)
-# Nicolas
+# Daniel
 
 # grid para cuadrar el lambda
 
@@ -351,7 +351,7 @@ rio::export(submission_ridge_1, "results/tanda1_modelo4.csv")
 # In Excel: YES
 
 # Subitted (10/11/2023)
-# Nicolas
+# Daniel
 
 # grid para cuadrar el lambda
 
