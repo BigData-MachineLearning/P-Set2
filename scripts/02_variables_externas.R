@@ -21,7 +21,7 @@ test_sf <- st_as_sf(test, coords = c("lon", "lat") , crs = 4326)
 ##### === 1.UPL === #####
 #===========================#
 
-# Sacado de Base de datos abieerto, unidades administrativas de bogota
+# Sacado de Base de datos abierto Alcaldia Bogota, unidades administrativas de bogota
 
 UPL <-st_read("stores/UPL")
 UPL<-st_transform(UPL,4326) # poner en mismo sistema de coordenandas

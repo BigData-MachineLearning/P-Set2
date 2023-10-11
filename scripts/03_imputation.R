@@ -282,3 +282,7 @@ test <- test %>%
   group_by(band) %>%
   mutate(bedrooms = ifelse(is.na(bedrooms), Mode(bedrooms), bedrooms)) %>%
   ungroup()
+
+test <- test |>
+  mutate(surface_total = ifelse(is.na(surface_total), mean(surface_total, na.rm = TRUE), surface_total)) 
+

@@ -1,11 +1,20 @@
 
-# first model
+# =============================================================================#
+############################ === Ridge Uno=== ##################################
+# =============================================================================#
 
+# In Excel: YES
+
+# Subitted (10/10/2023)
+# Jorge
+
+train <- import("db_tandas/train_1.csv")
+test <- import("db_tandas/test_1.csv")
 
 # grid para cuadrar el lambda
 
 
-penalty_grid <- grid_regular(penalty(range = c(-5, 5)), levels = 50)
+penalty_grid <- grid_regular(penalty(range = c(0, 10)), levels = 50)
 
 
 # Especifico el modelo
@@ -18,7 +27,7 @@ ridge_spec <-
 # Declaro mi receta
 
 ridge_recipe <- 
-  recipe(formula = price ~ year + surface_total + bedrooms + bathrooms + property_type2 + parqueadero  + pent_house + distancia_bus + ciclovia_near + distancia_parque + distancia_cc
+  recipe(formula = price ~ year + surface_total + bedrooms + bathrooms + property_type2 + parqueadero  + pent_house + distancia_bus + ciclovia_near + distancia_parque + distancia_cc 
 , data = train) %>% 
   step_novel(all_nominal_predictors()) %>% 
   step_dummy(all_nominal_predictors()) %>% 
@@ -66,5 +75,14 @@ ridge_final <- finalize_workflow(ridge_workflow, best_parms_ridge)
 
 ridge_final_fit <- fit(ridge_final, data = train)
 
-pred1 <- predict(ridge_final_fit, test)
+test$pred1 <- predict(ridge_final_fit, test)[[1]]
+
+# Guardar datos
+
+submission_ridge_1 <- test |> select(property_id, pred1) |>
+  rename(price = pred1) |>
+  mutate(price = round(price))
+
+
+rio::export(submission_ridge_1, "results/tanda1_modelo1.csv")
 

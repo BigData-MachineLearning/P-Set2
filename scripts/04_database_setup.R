@@ -88,7 +88,7 @@ test <- test |>
 ### === Dummy Penthouse === ###
 
 train <- train |> 
-  mutate(pent_house = as.numeric(grepl("\\b(parqueadero|garaje|parking|parqueo|garajes)\\b", train$description)))
+  mutate(pent_house = as.numeric(grepl("\\b(penthouse|pent house|penthause|pent hause)\\b", train$description)))
 
 test <- test |> 
   mutate(pent_house = as.numeric(grepl("\\b(penthouse|pent house|penthause|pent hause)\\b", test$description)))
