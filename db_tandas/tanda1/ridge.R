@@ -1,3 +1,8 @@
+#Bases de datos:
+
+
+train <- import("db_tandas/tanda1/train_1.csv")
+test <- import("db_tandas/tanda1/test_1.csv")
 
 # =============================================================================#
 ############################ === Ridge Uno=== ##################################
@@ -7,9 +12,6 @@
 
 # Subitted (10/10/2023)
 # Jorge
-
-train <- import("db_tandas/tanda1/train_1.csv")
-test <- import("db_tandas/tanda1/test_1.csv")
 
 # grid para cuadrar el lambda
 
