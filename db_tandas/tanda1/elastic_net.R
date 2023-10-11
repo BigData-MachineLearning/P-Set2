@@ -73,6 +73,7 @@ tune_enet <- tune_grid(
 # Escojo
 
 best_parms_enet <- select_best(tune_enet, metric = "mae")
+best_parms_enet
 
 # Finalizar el flujo de trabajo 'workflow' con el mejor valor de parametros
 enet_final <- finalize_workflow(enet_workflow, best_parms_enet)
