@@ -8,7 +8,7 @@ test <- import("db_tandas/tanda1/test_1.csv")
 ############################ === Lasso Uno=== ##################################
 # =============================================================================#
 
-# In Excel: YES
+# In Excel: NO- HAY QUE PONERLO; NO SE PUDO SUBIR TAMPOCO POR FALTA DE INTENTOS
 
 # Subitted (10/11/2023)
 # Nicolas
