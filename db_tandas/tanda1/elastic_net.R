@@ -30,7 +30,8 @@ enet_spec <-
 # Declaro mi receta
 
 enet_recipe <- 
-  recipe(formula = price ~ year + surface_total + bedrooms + bathrooms + property_type2 + parqueadero  + pent_house + distancia_bus + ciclovia_near + distancia_parque + distancia_cc 
+  recipe(formula = price ~ year + surface_total + bedrooms + bathrooms + property_type2 + parqueadero  + pent_house + distancia_bus + ciclovia_near + 
+           distancia_parque + distancia_cc 
          , data = train) %>%
   step_interact(terms = ~ bathrooms:bedrooms + surface_total:bedrooms + distancia_bus:ciclovia_near) %>% 
   step_novel(all_nominal_predictors()) %>% 
@@ -89,4 +90,4 @@ submission_enet_1 <- test |> select(property_id, pred1) |>
   mutate(price = round(price))
 
 
-rio::export(submission_enet_1, "results/tanda1_modelo5.csv")
+rio::export(submission_enet_1, "results/tanda1_enet5.csv")
