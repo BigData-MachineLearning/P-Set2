@@ -66,6 +66,7 @@ test <- test |>
 #====================================#
 ##### === 2.Imputacion rooms === #####
 #====================================#
+
 train <- train |>
   mutate(rooms_extr = str_extract(description, 
                                   "\\b(\\d+|uno|una|un|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s*(?:habitacion|habitaciones|cuarto|cuartos|alcoba|alcobas)\\b"
@@ -116,6 +117,7 @@ test <- test |>
   select(-c(rooms_extr, rooms_nums))
 
 # Imputacion bathrooms
+
 #========================================#
 ##### === 3.Imputacion bathrooms === #####
 #========================================#

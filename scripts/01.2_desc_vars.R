@@ -1,11 +1,12 @@
-##############################
-# ERevision palabras comunes #
-#############################
+
+# Revision palabras comunes #
 
 
+#========================#
 #### === LIMPIEZA === ####
+#========================#
 
-# Voy a unir tpdas las descripciones y analizar a ver que info tienen
+# Voy a unir tpdas las descripciones y analizar a ver que info tienen, lo hare solo con las primeras 5000
 
 all_descs <- ""
 for (i in 1:5000) {
@@ -23,8 +24,9 @@ all_descs <- gsub("\\d+", "", all_descs) # quito \digitos (numero)
 all_descs <- trimws(all_descs) # quito espacios al principio y final
 
 
-
+#============================#
 #### === TOKENIZACION === ####
+#============================#
 
 # Vamos a usar una nueva libreria
 p_load(tokenizers, stopwords, SnowballC)

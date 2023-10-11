@@ -11,6 +11,8 @@ longitud_central <- mean(train$lon)
 latitud_central <- mean(test$lat)
 longitud_central <- mean(test$lon)
 
+# Volvemos la base un objeto espacial
+
 train_sf <- st_as_sf(train, coords = c("lon", "lat") , crs = 4326)
 test_sf <- st_as_sf(test, coords = c("lon", "lat") , crs = 4326)
 
@@ -19,8 +21,10 @@ test_sf <- st_as_sf(test, coords = c("lon", "lat") , crs = 4326)
 ##### === 1.UPL === #####
 #===========================#
 
+# Sacado de Base de datos abieerto, unidades administrativas de bogota
+
 UPL <-st_read("stores/UPL")
-UPL<-st_transform(UPL,4326)
+UPL<-st_transform(UPL,4326) # poner en mismo sistema de coordenandas
 
 UPL <- UPL |>
   select(geometry, NOMBRE, CODIGO_UPL) |>
@@ -75,13 +79,17 @@ test<- test %>% mutate(distancia_bus=st_distance(x = test_sf, y = centroides_bus
 
 train$distancia_bus <- as.numeric(train$distancia_bus)
 test$distancia_bus <- as.numeric(test$distancia_bus)
+
 #==============================#
 ##### === 3.ciclovias  === #####
 #==============================#
+
 # Distancia ciclovias
 
 train_sf <- st_as_sf(train, coords = c("lon", "lat") , crs = 4326)
 test_sf <- st_as_sf(test, coords = c("lon", "lat") , crs = 4326)
+
+# Datos de datos abiertos de la Alcaldia
 
 ciclovias <-st_read("stores/ciclovias")
 

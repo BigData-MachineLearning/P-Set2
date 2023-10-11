@@ -22,7 +22,7 @@ test <- as.data.frame(import("stores/test.csv"))
 colnames(train)
 skim(train)
 
-# prperty_type numeric
+# property_type numeric
 
 train <- train %>%
   mutate(property_type2 = ifelse(property_type == "Apartamento", 0, 1))

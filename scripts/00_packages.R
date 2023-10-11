@@ -14,10 +14,10 @@ p_load(tidyverse, # Manipular dataframes
        sf, # Leer/escribir/manipular datos espaciales
        osmdata, # Get OSM's data 
        tidymodels,
-       stringi,
+       stringi,# Trabajar con texto
        skimr,
-       rsample,
-       blockCV,
-       spatialsample,
+       rsample, # Para resampleos
+       blockCV,# Hacer los folds para el cv 
+       spatialsample, #Hacer los folds para el cv espacial
        geosphere) #para modelos de ML
 
