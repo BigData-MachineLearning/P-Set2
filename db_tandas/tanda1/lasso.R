@@ -62,6 +62,7 @@ lasso_final <- finalize_workflow(lasso_workflow, best_penalty)
 # Ajustar el modelo de regresión Lasso utilizando los datos de entrenamiento
 lasso_final_fit <- fit(lasso_final, data = train)
 
+tidy(lasso_final_fit)
 test$pred1 <- predict(lasso_final_fit, test)[[1]]
 
 # Guardar datos
