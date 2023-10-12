@@ -183,7 +183,7 @@ rm(list=ls()[! ls() %in% c("train","test", "longitud_central", "latitud_central"
 #=======================================#
 ##### === 6.Estrato propiedades === #####
 #=======================================#
-
+sf_use_s2(FALSE)
 # Sacado de Base de datos abierto Alcaldia Bogota, uEstrato por manzanas
 
 estrato <-st_read("stores/estrato")

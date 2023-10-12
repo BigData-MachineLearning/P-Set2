@@ -2,6 +2,7 @@
 #===========================#
 ##### === 0.Set up  === #####
 #===========================#
+sf_use_s2(TRUE)
 
 colSums(is.na(train))
 # Hay missings considerables en:
@@ -290,24 +291,45 @@ test <- test |>
 ##### === 5.Imputando por el más cercano === #####
 #================================================#
 
-# variable de costo metro cuadrado 
-
-
-
-# Filter out appartments where pmt2 is empty
+# Filter out appartments where estrato is empty
 train_nonempty <- train[!is.na(train$estrato),]
 
 # Calculate distance matrix between all appartments
 dist_matrix <- distm(train[,c("lon", "lat")], train_nonempty[,c("lon", "lat")])
 
-# Find index of closest appartment where pmt2 is not empty
+# Find index of closest appartment where estrato is not empty
 closest_index <- apply(dist_matrix, 1, which.min)
-
-# Find value of closest appartment where pmt2 is not empty
+min_distances <- apply(dist_matrix, 1, min)
+# Find value of closest appartment where estrato is not empty
 closest_value <- train_nonempty$estrato[closest_index]
 
-# Replace NA values in pmt2 with closest values
-train$estrato <- replace(train$estrato, is.na(train$estrato), closest_value)
+# Replace NA values in estrato with closest values
+train <- train |>
+  mutate(estrato_closest = closest_value) |>
+  mutate(estrato = ifelse(is.na(estrato, estrato_closest, estrato))) |>
+  mutate(min_distance = min_distances) |>
+  mutate(estrato = ifelse(min_distance >= 700, NA, estrato ))
 
 
+
+######################## Ahora con test #######################################
+
+# Filter out appartments where estrato is empty
+test_nonempty <- test[!is.na(test$estrato),]
+
+# Calculate distance matrix between all appartments
+dist_matrix <- distm(test[,c("lon", "lat")], test_nonempty[,c("lon", "lat")])
+
+# Find index of closest appartment where estrato is not empty
+closest_index <- apply(dist_matrix, 1, which.min)
+min_distances <- apply(dist_matrix, 1, min)
+# Find value of closest appartment where estrato is not empty
+closest_value <- train_nonempty$estrato[closest_index]
+
+# Replace NA values in estrato with closest values
+test <- test |>
+  mutate(estrato_closest = closest_value) |>
+  mutate(estrato = ifelse(is.na(estrato, estrato_closest, estrato))) |>
+  mutate(min_distance = min_distances) |>
+  mutate(estrato = ifelse(min_distance >= 700, NA, estrato ))
 

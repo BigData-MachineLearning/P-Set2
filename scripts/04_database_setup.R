@@ -129,8 +129,8 @@ test$bedrooms <- ifelse(!is.na(test$bedrooms) & test$bedrooms != test$rooms, tes
 
 
 #Export
-rio::export(train, "db_tandas/tanda1/train_1.csv")
-rio::export(test, "db_tandas/tanda1/test_1.csv")
+#rio::export(train, "db_tandas/tanda1/train_1.csv")
+#rio::export(test, "db_tandas/tanda1/test_1.csv")
 
 #Vamos a hacer la tanda 2 a partir de la tanda 1.
 
