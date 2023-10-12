@@ -128,7 +128,51 @@ train$bedrooms <- ifelse(!is.na(train$bedrooms) & train$bedrooms != train$rooms,
 test$bedrooms <- ifelse(!is.na(test$bedrooms) & test$bedrooms != test$rooms, test$rooms, test$bedrooms)
 
 
-
 #Export
 rio::export(train, "db_tandas/tanda1/train_1.csv")
 rio::export(test, "db_tandas/tanda1/test_1.csv")
+
+#Vamos a hacer la tanda 2 a partir de la tanda 1.
+
+train2 <- import("db_tandas/tanda1/train_1.csv")
+test2 <- import ("db_tandas/tanda1/test_1.csv")
+
+names(train2)
+names(test2)
+
+summary(train2$price) %>% 
+  as.matrix() %>% 
+  as.data.frame() %>% 
+  mutate(V1=scales::dollar(V1))
+
+
+summary(train2$pmt2) %>% 
+  as.matrix() %>% 
+  as.data.frame() %>% 
+  mutate(V1=scales::dollar(V1))
+
+train2 <- train2 %>% 
+  filter(between(pmt2,100000,12e6)) #Antes estabamos con 38644 observaciones.
+#Ahora estamos con 37488 observaciones. 
+
+#Ahora miremos como están los datos despúes de ese filtro:
+
+summary(train2) #Vemos que surface_total sigue teniendo outliers, entonces
+# intentemos filtrar a ver cuantas observaciones perdemos.
+
+train2 <- train2 %>% 
+  filter(between(surface_total,0,500)) #Recordemos que teniamos 37488 observaciones antes.
+# ahora quedamos con 36629
+
+#Organizamos test2
+summary(test2)
+
+test2 <- test2 %>% 
+  filter(between(surface_total,0,500))
+
+rio::export(train2, "db_tandas/tanda2/train_2.csv")
+rio::export(test2, "db_tandas/tanda2/test_2.csv")
+
+
+
+
