@@ -51,3 +51,10 @@ ggplot(tanda2, aes(x = surface_total, y = price)) +
        y = "Precio")
 
 
+ggplot(tanda2, aes(x = bedrooms, y = price)) +
+  geom_point(shape = 1, color = "blue") +
+  labs(title = "Gráfico de Dispersión",
+       x = "Surface_total",
+       y = "Precio")
+
+
