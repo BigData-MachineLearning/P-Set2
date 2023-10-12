@@ -286,3 +286,28 @@ test <- test %>%
 test <- test |>
   mutate(surface_total = ifelse(is.na(surface_total), mean(surface_total, na.rm = TRUE), surface_total)) 
 
+#================================================#
+##### === 5.Imputando por el más cercano === #####
+#================================================#
+
+# variable de costo metro cuadrado 
+
+
+
+# Filter out appartments where pmt2 is empty
+train_nonempty <- train[!is.na(train$estrato),]
+
+# Calculate distance matrix between all appartments
+dist_matrix <- distm(train[,c("lon", "lat")], train_nonempty[,c("lon", "lat")])
+
+# Find index of closest appartment where pmt2 is not empty
+closest_index <- apply(dist_matrix, 1, which.min)
+
+# Find value of closest appartment where pmt2 is not empty
+closest_value <- train_nonempty$estrato[closest_index]
+
+# Replace NA values in pmt2 with closest values
+train$estrato <- replace(train$estrato, is.na(train$estrato), closest_value)
+
+
+
