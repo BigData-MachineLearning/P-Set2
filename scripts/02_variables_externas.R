@@ -178,3 +178,31 @@ test <- test %>% mutate(distancia_cc = dist_min)
 #Finalizo y limpio ws
 rm(list=ls()[! ls() %in% c("train","test", "longitud_central", "latitud_central", 
                            "train_sf", "test_sf" )])
+
+
+#=======================================#
+##### === 6.Estrato propiedades === #####
+#=======================================#
+
+# Sacado de Base de datos abierto Alcaldia Bogota, uEstrato por manzanas
+
+estrato <-st_read("stores/estrato")
+estrato <-st_transform(estrato,4326) # poner en mismo sistema de coordenandas
+
+
+estrato <- estrato |> clean_names() |>
+  select(geometry, estrato, codigo_man) 
+
+train_sf <-  st_join(train_sf, estrato)
+train_sf$lat <- st_coordinates(train_sf)[, "Y"]
+train_sf$lon <- st_coordinates(train_sf)[, "X"]
+
+train <- st_drop_geometry(train_sf)
+
+
+test_sf <-  st_join(test_sf, estrato)
+test_sf$lat <- st_coordinates(test_sf)[, "Y"]
+test_sf$lon <- st_coordinates(test_sf)[, "X"]
+
+test <- st_drop_geometry(test_sf)
+

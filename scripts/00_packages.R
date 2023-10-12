@@ -19,5 +19,6 @@ p_load(tidyverse, # Manipular dataframes
        rsample, # Para resampleos
        blockCV,# Hacer los folds para el cv 
        spatialsample, #Hacer los folds para el cv espacial
-       geosphere) #para modelos de ML
+       geosphere, #para modelos de ML
+       janitor) 
 
