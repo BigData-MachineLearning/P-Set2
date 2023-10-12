@@ -90,4 +90,4 @@ submission_enet_1 <- test |> select(property_id, pred1) |>
   mutate(price = round(price))
 
 
-rio::export(submission_enet_1, "results/tanda1_enet5.csv")
+rio::export(submission_enet_1, "results/tanda1_enet1.csv")
