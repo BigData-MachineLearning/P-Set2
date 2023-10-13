@@ -7,25 +7,42 @@ rm(list = ls())
 train2 <- import("db_tandas/tanda2/train_2.csv")
 test2 <- import("db_tandas/tanda2/test_2.csv")
 
-train2_final <- train2
-test2_final  <- test2
+train2_final <- merge(train1,train2,by="property_id")
+test2_final  <- merge(test1,test2,by="property_id")
 
+train2_final <- train2_final %>% 
+  select(property_id,price.x, year.x, surface_total.x, estrato_closest,bedrooms.x,bathrooms.x,property_type.x,parqueadero.x
+         ,distancia_bus.x,ciclovia_near.x,distancia_parque,distancia_cc,UPL.x)
+
+train2_final <- train2_final %>% rename(
+  price=price.x,surface_total=surface_total.x,bedrooms=bedrooms.x, year=year.x,bathrooms=bathrooms.x,
+  distancia_bus=distancia_bus.x,UPL=UPL.x, estrat=estrato_closest,parqueadero=parqueadero.x,ciclovia_near=ciclovia_near.x
+)
+
+test2_final <- test2_final %>% 
+  select(property_id,price.x, year.x, surface_total.x, estrato_closest,bedrooms.x,bathrooms.x,property_type.x,parqueadero.x
+         ,distancia_bus.x,ciclovia_near.x,distancia_parque,distancia_cc,UPL.x)
+
+test2_final <- test2_final %>% rename(
+  price=price.x,surface_total=surface_total.x,bedrooms=bedrooms.x, year=year.x,bathrooms=bathrooms.x,
+  distancia_bus=distancia_bus.x,UPL=UPL.x, estrat=estrato_closest,parqueadero=parqueadero.x,ciclovia_near=ciclovia_near.x
+)
 
 
 # =============================================================================#
 ############################ === Lasso Uno=== ##################################
 # =============================================================================#
 
-# In Excel: Yes
+# In Excel:
 
-# Subitted : 10/13/2023
+# Subitted 
 # Nicolas
 
 #Esto se utilizará para evaluar el rendimiento del modelo en diferentes subconjuntos de  datos durante la validación cruzada.
 df_fold <- vfold_cv(train2_final, v = 5)
 
 lasso_recipe <- 
-  recipe(formula = price ~ year + surface_total + estrato + bedrooms + bathrooms + parqueadero +
+  recipe(formula = price ~ year + surface_total + estrat + bedrooms + bathrooms + parqueadero +
            distancia_bus + ciclovia_near + distancia_parque + distancia_cc, data = train2_final) %>%
   step_interact(terms = ~ bedrooms:bathrooms + ciclovia_near:distancia_bus) %>% 
   step_novel(all_nominal_predictors()) %>% 
@@ -79,5 +96,4 @@ submission_lasso_1 <-test2_final |> select(property_id, pred1) |>
   mutate(price = round(price))
 
 
-rio::export(submission_lasso_1, "results/tanda2_lassomodelo1.0.csv")
-
+rio::export(submission_lasso_1, "results/tanda2_lassomodelo1.csv")
