@@ -9,16 +9,25 @@ train2 <- import("db_tandas/tanda2/train_2.csv")
 test2 <- import("db_tandas/tanda2/test_2.csv")
 
 train2_final <- merge(train1,train2,by="property_id")
+test2_final  <- merge(test1,test2,by="property_id")
 
 train2_final <- train2_final %>% 
   select(property_id,price.x, year.x, surface_total.x, estrato_closest,bedrooms.x,bathrooms.x,property_type.x,parqueadero.x
-         ,distancia_bus.x,ciclovia_near,distancia_parque,distancia_cc,UPL.x)
+         ,distancia_bus.x,ciclovia_near.x,distancia_parque,distancia_cc,UPL.x)
 
 train2_final <- train2_final %>% rename(
   price=price.x,surface_total=surface_total.x,bedrooms=bedrooms.x, year=year.x,bathrooms=bathrooms.x,
-  distancia_bus=distancia_bus.x,UPL=UPL.x, estrat=estrato_closest,parqueadero=parqueadero.x
+  distancia_bus=distancia_bus.x,UPL=UPL.x, estrat=estrato_closest,parqueadero=parqueadero.x,ciclovia_near=ciclovia_near.x
 )
-train2_final$surface_total
+
+test2_final <- test2_final %>% 
+  select(property_id,price.x, year.x, surface_total.x, estrato_closest,bedrooms.x,bathrooms.x,property_type.x,parqueadero.x
+         ,distancia_bus.x,ciclovia_near.x,distancia_parque,distancia_cc,UPL.x)
+
+test2_final <- test2_final %>% rename(
+  price=price.x,surface_total=surface_total.x,bedrooms=bedrooms.x, year=year.x,bathrooms=bathrooms.x,
+  distancia_bus=distancia_bus.x,UPL=UPL.x, estrat=estrato_closest,parqueadero=parqueadero.x,ciclovia_near=ciclovia_near.x
+)
 
 
 # =============================================================================#
@@ -80,10 +89,10 @@ lasso_final <- finalize_workflow(lasso_workflow, best_penalty)
 lasso_final_fit <- fit(lasso_final, data = train2_final)
 
 tidy(lasso_final_fit)
-test2$pred1 <- predict(lasso_final_fit, test2)[[1]]
+test2_final$pred1 <- predict(lasso_final_fit, test2_final)[[1]]
 
 # Guardar datos
-submission_lasso_1 <-test2 |> select(property_id, pred1) |>
+submission_lasso_1 <-test2_final |> select(property_id, pred1) |>
   rename(price = pred1) |>
   mutate(price = round(price))
 
