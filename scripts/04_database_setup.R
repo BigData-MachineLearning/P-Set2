@@ -171,7 +171,3 @@ summary(test2)
 
 rio::export(train2, "db_tandas/tanda2/train_2.csv")
 rio::export(test2, "db_tandas/tanda2/test_2.csv")
-
-
-
-
