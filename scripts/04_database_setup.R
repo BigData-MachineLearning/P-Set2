@@ -121,7 +121,7 @@ source("scripts/02_variables_externas.R")
 
 
 source("scripts/03_imputation.R")
-
+sf_use_s2(TRUE)
 # Termino de corregir los cuartos/habitaciones
 
 train$bedrooms <- ifelse(!is.na(train$bedrooms) & train$bedrooms != train$rooms, train$rooms, train$bedrooms)
