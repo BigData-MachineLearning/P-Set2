@@ -134,8 +134,8 @@ test$bedrooms <- ifelse(!is.na(test$bedrooms) & test$bedrooms != test$rooms, tes
 
 #Vamos a hacer la tanda 2 a partir de la tanda 1.
 
-train2 <- import("db_tandas/tanda1/train_1.csv")
-test2 <- import ("db_tandas/tanda1/test_1.csv")
+train2 <- train
+test2 <- test
 
 names(train2)
 names(test2)
@@ -167,8 +167,7 @@ train2 <- train2 %>%
 #Organizamos test2
 summary(test2)
 
-test2 <- test2 %>% 
-  filter(between(surface_total,0,500))
+
 
 rio::export(train2, "db_tandas/tanda2/train_2.csv")
 rio::export(test2, "db_tandas/tanda2/test_2.csv")
