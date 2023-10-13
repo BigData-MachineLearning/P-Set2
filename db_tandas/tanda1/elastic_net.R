@@ -9,9 +9,9 @@ test <- import("db_tandas/tanda1/test_1.csv")
 ############################ === E-NET 1 === ##################################
 # =============================================================================#
 
-# In Excel: no
+# In Excel: YES
 
-# Subitted (10/()/2023)
+# Subitted (10/11/2023)
 # Jorge
 
 # grid para cuadrar el lambda
