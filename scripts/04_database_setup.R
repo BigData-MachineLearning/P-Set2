@@ -134,8 +134,8 @@ test$bedrooms <- ifelse(!is.na(test$bedrooms) & test$bedrooms != test$rooms, tes
 
 #Vamos a hacer la tanda 2 a partir de la tanda 1.
 
-train2 <- train
-test2 <- test
+# train2 <- train
+# test2 <- test
 
 names(train2)
 names(test2)
@@ -167,7 +167,29 @@ train2 <- train2 %>%
 #Organizamos test2
 summary(test2)
 
-
+# #
+# train1 <- import("db_tandas/tanda1/train_1.csv")
+# test1 <- import("db_tandas/tanda1/test_1.csv")
+# 
+# train2 <- train
+# test2 <- test
+# 
+# 
+# 
+# # Replace missing values in train2
+# train2 <- train2 %>%
+#   left_join(train1 %>% select(property_id, bedrooms), by = "property_id") %>%
+#   mutate(bedrooms = ifelse(is.na(bedrooms.x), bedrooms.y, bedrooms.x)) %>%
+#   select(-bedrooms.x, -bedrooms.y)
+# 
+# # Replace missing values in test2
+# test2 <- test2 %>%
+#   left_join(test1 %>% select(property_id, bedrooms), by = "property_id") %>%
+#   mutate(bedrooms = ifelse(is.na(bedrooms.x), bedrooms.y, bedrooms.x)) %>%
+#   select(-bedrooms.x, -bedrooms.y)
+# 
+# train2 <- train2 %>% filter(!is.na(estrato))
+# #
 
 rio::export(train2, "db_tandas/tanda2/train_2.csv")
 rio::export(test2, "db_tandas/tanda2/test_2.csv")
