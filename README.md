@@ -23,7 +23,13 @@ En el caso de una vivienda, estas características pueden incluir atributos estr
 
 `db_tandas`:
 Contiene todas las bases modificadas para la estimacion de los modelos.
-Ademas tiene el archivo de excel models_registry.xlsx el cual sirve para registrar el desempeño de distintos modelos e informacion de las especificaciones usadas. 
+Ademas tiene el archivo de excel `models_registry.xlsx` el cual sirve para registrar el desempeño de distintos modelos e informacion de las especificaciones usadas. 
+
+  - Una tanda representa cambios significativos en la base de entrenamiento y testing del modelo (i.e: limpieza de outliers, inclusión de múltiples variables nuevas, entre otros)
+  
+  - La información de estas esta guardada en carpetas llamadas `tanda#` dependiendo del numero de la tanda. En cada una se encuentran los scripts por modelo donde para esa tanda quedan registrados los modelos de distintos tipos por ejemplo `forests.R`dentro de la carpeta `tanda1` contendrá todos los moddelos de random forest entrenados con la base de datos de esa tanda.
+  
+  - Las tandas incluyen dentro de cada una los archivos de `train_#` y `test_#` dependiendo del numero de la tanda y son las bases que se utilizan para entrenar los modelos de cada tanda. 
 
 `views`:
 Contiene las imagenes, los mapas, gráicos y demas vizualizaciones usadas en el documento final. 
@@ -40,7 +46,7 @@ Contiene todos los scrips del taller que se corren para hacer las predicciones. 
 - `02_variables_externas.R` <- Se incluyen variables externas geoespaciales de Open Map Tools y de datos abiertos de la alcaldía de Bogotá. 
 - `03_imputation.R` <- Imputaciones de missings en bases de training y testing.
 - `04_database_setup.R` <- Se corren los scripts del 0 al 3 y se agregan variables del terxto de la descripcion, luego exporta la base de datos que se usara para la tanada de modelos.
-- `05_models.R` <- Ejecuta modelos para predecir los precios y guarda los resultados.
+
 
 `document`:
 Documento de trabajo final
