@@ -191,5 +191,32 @@ summary(test2)
 # train2 <- train2 %>% filter(!is.na(estrato))
 # #
 
-rio::export(train2, "db_tandas/tanda2/train_2.csv")
-rio::export(test2, "db_tandas/tanda2/test_2.csv")
+# rio::export(train2, "db_tandas/tanda2/train_2.csv")
+# rio::export(test2, "db_tandas/tanda2/test_2.csv")
+
+# =============================================================================#
+############################ === Tanda 3 === ###################################
+# =============================================================================#
+
+ 
+ train <- import("db_tandas/tanda2/train_2.csv")
+ test <- import("db_tandas/tanda2/test_2.csv")
+ 
+ 
+ # train <- train |>
+ #   filter(UPL %in% c("Usaquén", "Niza", "Barrios Unidos", "Teusaquillo", "Chapinero"))
+ 
+ # train <- train |>
+ #   filter(UPL == "Chapinero")
+ 
+ train$estrato <- as.factor(train$estrato)
+ 
+ test$estrato <- as.factor(test$estrato)
+ 
+ 
+  rio::export(train, "db_tandas/tanda3/train_3.csv")
+  rio::export(test, "db_tandas/tanda3/test_3.csv")
+ 
+
+
+
