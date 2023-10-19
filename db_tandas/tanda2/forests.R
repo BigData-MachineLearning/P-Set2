@@ -30,10 +30,10 @@ forest_spec <- rand_forest(
 
 
 tune_grid_forest <- grid_regular(
-  mtry(range = c(4, 6)),
+  mtry(range = c(4, 10)),
   min_n(range = c(5, 50)),
-  trees(range = c(300, 300),
-        levels = c(3, 10, 1))
+  trees(range = c(300, 300)),
+  levels = c(7, 10, 1)
   )
   
   forest_recipe <- 
