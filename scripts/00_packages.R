@@ -20,5 +20,7 @@ p_load(tidyverse, # Manipular dataframes
        blockCV,# Hacer los folds para el cv 
        spatialsample, #Hacer los folds para el cv espacial
        geosphere, #para modelos de ML
-       janitor) 
+       janitor,
+       tictoc,
+       doParallel) 
 
