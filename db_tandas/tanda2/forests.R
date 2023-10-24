@@ -306,7 +306,7 @@ submission_forest_4 <- test |> select(property_id, pred1) |>
   mutate(price = round(price))
 
 
-rio::export(submission_forest_2, "results/tanda2_forest4.csv")
+rio::export(submission_forest_4, "results/tanda2_forest4.csv")
 
 
 
