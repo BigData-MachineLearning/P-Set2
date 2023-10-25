@@ -214,9 +214,65 @@ summary(test2)
  test$estrato <- as.factor(test$estrato)
  
  
-  rio::export(train, "db_tandas/tanda3/train_3.csv")
-  rio::export(test, "db_tandas/tanda3/test_3.csv")
- 
+  # rio::export(train, "db_tandas/tanda3/train_3.csv")
+  # rio::export(test, "db_tandas/tanda3/test_3.csv")
+  # 
 
+  # =============================================================================#
+  ############################ === Tanda 4 === ###################################
+  # =============================================================================#
+  train <- import("db_tandas/tanda2/train_2.csv")
+  test <- import("db_tandas/tanda2/test_2.csv")
 
-
+  # Determinamos el centro del mapa 
+  latitud_central <- mean(train$lat)
+  longitud_central <- mean(train$lon)
+  
+  latitud_central <- mean(test$lat)
+  longitud_central <- mean(test$lon)
+  
+  # Volvemos la base un objeto espacial
+  
+  train_sf <- st_as_sf(train, coords = c("lon", "lat") , crs = 4326)
+  test_sf <- st_as_sf(test, coords = c("lon", "lat") , crs = 4326)
+  
+  #============================#
+  ##### === Add Police === #####
+  #============================#
+  
+  # Extraemos la info de las estaciones del Transmi
+  police <- opq(bbox = getbb("Bogotá Colombia")) %>%
+    add_osm_feature(key ='amenity' , value = 'police') 
+  # Cambiamos el formato para que sea un objeto sf (simple features)
+  
+  police_sf <- osmdata_sf(police)
+  
+  # De las features del parque nos interesa su geomoetría y donde están ubicados 
+  police_sf_geometria <- police_sf$osm_polygons %>% 
+    select(osm_id, name)
+  
+  # Calculamos el centroide de cada parque para aproximar su ubicación como un solo punto 
+  #centroides <- gCentroid(as(parada_de_bus_sf_geometria$geometry, "Spatial"), byid = T)
+  centroides_police <-st_centroid(police_sf_geometria$geometry)
+  
+  # centroides de distancia a transmi
+  
+  centroides_police_sf <- do.call(rbind, st_geometry(centroides_police)) |>
+    as_tibble() |> setNames(c("lon", "lat"))
+  
+  # centroides coords y crs
+  centroides_police_sf <- st_as_sf(centroides_police_sf, coords = c("lon", "lat"), crs=4326)
+  
+  nearest_police <- st_nearest_feature(train_sf,centroides_police_sf)
+  
+  train<- train %>% mutate(distancia_police=st_distance(x = train_sf, y = centroides_police_sf[nearest_police,], by_element=TRUE))
+  
+  nearest_police <- st_nearest_feature(test_sf,centroides_police_sf)
+  test<- test %>% mutate(distancia_police=st_distance(x = test_sf, y = centroides_police_sf[nearest_police,], by_element=TRUE))
+  
+  train$distancia_police <- as.numeric(train$distancia_police)
+  test$distancia_police <- as.numeric(test$distancia_police)
+  
+  
+  rio::export(train, "db_tandas/tanda4/train_4.csv")
+  rio::export(test, "db_tandas/tanda4/test_4.csv")
