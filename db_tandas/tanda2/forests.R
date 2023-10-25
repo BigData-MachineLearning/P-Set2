@@ -31,9 +31,9 @@ forest_spec <- rand_forest(
 
 
 tune_grid_forest <- grid_regular(
-  mtry(range = c(5, 5)),
+  mtry(range = c(10,10)),
   min_n(range = c(50, 50)),
-  trees(range = c(300, 300)),
+  trees(range = c(450, 450)),
   levels = c(1, 1, 1)
 )
 
@@ -98,12 +98,12 @@ test$pred1 <- predict(forest_final_fit, test)[[1]]
 
 # Guardar datos
 
-submission_forest_6 <- test |> select(property_id, pred1) |>
+submission_forest_7 <- test |> select(property_id, pred1) |>
   rename(price = pred1) |>
   mutate(price = round(price))
 
 
-rio::export(submission_forest_5, "results/tanda2_forest7.csv")
+rio::export(submission_forest_7, "results/tanda2_forest7.csv")
 
 # =============================================================================#
 ############################ === Forest 6 === ##################################

@@ -22,5 +22,8 @@ p_load(tidyverse, # Manipular dataframes
        geosphere, #para modelos de ML
        janitor,
        tictoc,
-       doParallel) 
+       doParallel,
+       ranger,
+       rpart,
+       caret) 
 
