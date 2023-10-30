@@ -25,5 +25,7 @@ p_load(tidyverse, # Manipular dataframes
        doParallel,
        ranger,
        rpart,
-       caret) 
+       caret,
+       stargazer,
+       ggmap) 
 
